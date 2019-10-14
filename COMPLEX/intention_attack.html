@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ECharts</title>
+		<!-- 引入 echarts.js -->
+		<script src="jquery.min.js"></script>
+		<script src="echarts.min.js"></script>
+		<script src="dataTool.min.js"></script>
+		<script src="jquery.min.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href='./static/css/bootstrap.min.css'>
+		<link rel="stylesheet" type="text/css" href='./static/css/font-awesome.min.css'>
+		<link rel="stylesheet" type="text/css" href='./static/css/animate.min.css'>
+		<link rel="stylesheet" type="text/css" href='./static/css/bootstrap-switch.min.css'>
+		<link rel="stylesheet" type="text/css" href='./static/css/checkbox3.min.css'>
+		<link rel="stylesheet" type="text/css" href='./static/css/jquery.dataTables.min.css'>
+		<link rel="stylesheet" type="text/css" href='./static/css/dataTables.bootstrap.css'>
+		<link rel="stylesheet" type="text/css" href='./static/css/select2.min.css'>
+		<!-- CSS App -->
+		<link rel="stylesheet" type="text/css" href='./static/style.css'>
+		<link rel="stylesheet" type="text/css" href='./static/flat-blue.css'>
+		<script>
+			function gopie()
+			{
+				window.location.href = './pie.html';
+			}
+			function gomain()
+			{
+				window.location.href = './index.html';
+			}
+			function goattack()
+			{
+			    window.location.href = './intention_attack.html';
+			}
+			function gorandom()
+			{
+			    window.location.href = './random_attack.html';
+			}
+			function goadds()
+			{
+			    window.location.href = './add_edge.html';
+			}
+			function gofinal()
+			{
+			    window.location.href = './final.html';
+			}
+		</script>
+	</head>
+	<body>
+	 <div class="app-container">
+        <div class="row content-container">
+
+			<div class="side-menu sidebar-inverse">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="side-menu-container">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" onclick="gomain()" style="cursor:pointer">
+                                <div class="icon fa fa-paper-plane"></div>
+                                <div class="title">Complex network</div>
+                            </a>
+                            <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+                                <i class="fa fa-times icon"></i>
+                            </button>
+                        </div>
+                        <ul class="nav navbar-nav">
+                                <li class="panel-default" style="background-color: transparent">
+                                <a onclick="gomain()" style="cursor:pointer">
+                                    <span class="icon fa fa-tachometer"></span><span class="title">Origin Network</span>
+                                </a>
+                            </li>
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a onclick="gopie()" style="cursor:pointer">
+                                        <span class="icon fa fa-desktop"></span><span class="title">Data Statistic</span>
+                                    </a>
+                            </li>
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a onclick="goattack()" style="cursor:pointer">
+                                        <span class="icon fa fa-table"></span><span class="title">Intentional Attack</span>
+                                    </a>
+                            </li>
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a onclick="gorandom()" style="cursor:pointer">
+                                        <span class="icon fa fa-file-text-o"></span><span class="title">Random Attack</span>
+                                    </a>
+                            </li>
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a onclick="goadds()" style="cursor:pointer">
+                                        <span class="icon fa fa-cubes"></span><span class="title">Add Edge</span>
+                                    </a>
+                            </li>
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a onclick="gofinal()" style="cursor:pointer">
+                                        <span class="icon fa fa-slack"></span><span class="title">Final-Network</span>
+                                    </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+		</div>
+         <div>
+            <div id="intention" style="width: 1200px;height:700px;">
+                <script type="text/javascript">
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('intention'));
+                var option;
+                myChart.showLoading();
+                var graph_nodes = Array();
+                var graph_links = Array();
+                var id_count;
+                $.get('net6.grxf', function(xml) {
+                    myChart.hideLoading();
+
+                    var graph = echarts.dataTool.gexf.parse(xml);
+                    var categories = [];
+                    for (var i = 0; i < 9; i++) {
+                        categories[i] = {
+                            name: 'coreness ' + i
+                        };
+                    }
+                    graph_links = graph.links;
+                    id_count = graph_links.length;
+                    graph_nodes = graph.nodes;
+                     console.log(graph_nodes);
+                    graph.nodes.forEach(function (node) {
+                        node.itemStyle = null;
+                        node.symbolSize = 10;
+                        node.value = node.attributes.id_class;
+                        node.category = node.attributes.modularity_class;
+                        // Use random x, y
+                        node.x = node.y = null;
+                        node.draggable = false;
+                    });
+                    option = {
+                        title: {
+                            text: 'Complex network',
+                            subtext: 'Default layout',
+                            top: 'bottom',
+                            left: 'right'
+                        },
+                        tooltip: {
+                    //		formatter: function (node) {
+                    //			return node.value;
+                    //    }
+                        },
+                        legend: [{
+                            // selectedMode: 'single',
+                    //		data: categories.map(function (a) {
+                    //			return a.name;
+                    //		})
+                        }],
+                        animation: false,
+                        series : [
+                            {
+                                name: 'Complex network',
+                                type: 'graph',
+                                layout: 'force',
+                                data: graph.nodes,
+                                links: graph_links,
+                                categories: categories,
+                                roam: true,
+                                label: {
+                                    normal: {
+                                        //show:true,
+                                        position: 'right'
+                                    }
+                                },
+                                force: {
+                                    repulsion: 100
+                                },
+                                focusNodeAdjacency:true
+                            }
+                        ]
+                    };
+                    myChart.setOption(option);
+                }, 'xml');
+                var index = 0;
+                var ij_len = 0;
+                var remove_order = Array();
+                $.get('intention_attack_order.json', function(data) {
+                    var fp = typeof data=='string'?JSON.parse(data):data;
+                    remove_order = fp.attack_order;
+                    ij_len = fp.attack_order.length;
+                });
+
+
+                setInterval(function() {
+                    if(ij_len>0){
+                    ij_len--;
+                    for(var i in graph_nodes)
+                    {
+                        if(graph_nodes[i].id == remove_order[index])
+                        {
+                            graph_nodes.splice(i,1);
+                            console.log(remove_order[index]);
+                            break;
+                        }
+                    }
+                    index++;
+                    myChart.setOption({
+                        series: [{
+                            roam: true,
+                            data: graph_nodes,
+                            edges: graph_links
+                        }]
+                    });}
+                }, 500);
+            </script>
+            </div>
+         </div>
+	 </div>
+	</body>
+
+</html>

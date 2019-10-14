@@ -1,0 +1,24 @@
+{
+  "name": "complex",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "make test",
+    "start": "electron .",
+    "pack-app": "./node_modules/.bin/electron-packager . --overwrite",
+    "pack-it": "electron-builder --win"
+  },
+  "author": "HJC",
+  "license": "ISC",
+  "dependencies": {
+    "echarts": "^4.3.0",
+    "jquery": "^3.4.1"
+  },
+  "devDependencies": {
+    "electron": "^6.0.11",
+    "electron-builder": "^21.2.0",
+    "electron-packager": "^14.0.6",
+    "http-server": "^0.9.0"
+  }
+}

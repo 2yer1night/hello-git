@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>监控主界面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
+    <!-- CSS Libs -->
+    <link rel="stylesheet" type="text/css" href='./static/css/bootstrap.min.css'>
+    <link rel="stylesheet" type="text/css" href='./static/css/font-awesome.min.css'>
+    <link rel="stylesheet" type="text/css" href='./static/css/animate.min.css'>
+    <link rel="stylesheet" type="text/css" href='./static/css/bootstrap-switch.min.css'>
+    <link rel="stylesheet" type="text/css" href='./static/css/checkbox3.min.css'>
+    <link rel="stylesheet" type="text/css" href='./static/css/jquery.dataTables.min.css'>
+    <link rel="stylesheet" type="text/css" href='./static/css/dataTables.bootstrap.css'>
+    <link rel="stylesheet" type="text/css" href='./static/css/select2.min.css'>
+    <!-- CSS App -->
+    <link rel="stylesheet" type="text/css" href='./static/style.css")}}>
+    <link rel="stylesheet" type="text/css" href='./static/flat-blue.css")}}>
+<script type="text/javascript">
+        function copyurl(str)
+        {
+            var iid = str.id;
+            var Url2 = self.location.href.replace('manage','download/')+iid;
+            var oInput = document.createElement('input');
+            oInput.value = Url2;
+            document.body.appendChild(oInput);
+            oInput.select();
+            document.execCommand("Copy");
+            oInput.className = 'oInput';
+            oInput.style.display = 'none';
+            alert('http链接已复制到剪切板');
+        }
+</script>
+</head>
+
+<body class="flat-blue">
+    <div class="app-container">
+        <div class="row content-container">
+            <div class="side-menu sidebar-inverse">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="side-menu-container">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="/main">
+                                <div class="icon fa fa-paper-plane"></div>
+                                <div class="title">6s 分布式计算平台</div>
+                            </a>
+                            <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+                                <i class="fa fa-times icon"></i>
+                            </button>
+                        </div>
+                        <ul class="nav navbar-nav">
+                                <li class="panel-default" style="background-color: transparent">
+                                <a href="/main">
+                                    <span class="icon fa fa-tachometer"></span><span class="title">主界面</span>
+                                </a>
+                            </li>
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a href="/done">
+                                        <span class="icon fa fa-desktop"></span><span class="title">查看完成任务</span>
+                                    </a>
+                            </li>
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a href="/node">
+                                        <span class="icon fa fa-table"></span><span class="title">查看计算节点</span>
+                                    </a>
+                            </li>
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a href="/new_mission">
+                                        <span class="icon fa fa-file-text-o"></span><span class="title">任务上传</span>
+                                    </a>
+                            </li>
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a href="/manage">
+                                        <span class="icon fa fa-cubes"></span><span class="title">文件管理</span>
+                                    </a>
+                            </li>
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a href="/main">
+                                        <span class="icon fa fa-slack"></span><span class="title">关于</span>
+                                    </a>
+                            </li>
+                            <!--
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a href="index.html">
+                                        <span class="icon fa fa-archive"></span><span class="title">Dashboard</span>
+                                    </a>
+                            </li>
+                            -->
+                        </ul>
+                    </div>
+                    <!-- /.navbar-collapse -->
+                </nav>
+            </div>
+
+        </div>
+
+    <div class="container-fluid" style="text-align: center">
+            <div class="side-body padding-top" style="text-align: center">
+                <div class="row  no-margin-bottom" style="text-align: center">
+                    <div class="row">
+                            <div class="">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title" style="background-color:forestgreen">
+                                            <div class="title" style="color: ghostwhite">文件上传</div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div class="text-indent">
+                                              <form method=post enctype=multipart/form-data>
+                                                <input type=file name=file>
+                                                <input type=submit value=上传>
+                                              </form>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                    </div>
+                    <div class="card card-success" style="text-align: center">
+                        <div class="card-header" style="text-align: center">
+                            <div class="card-title" style="background-color:peru">
+                                <div class="title">文件管理</div>
+                            </div>
+                            <div class="clear-both"></div>
+                        </div>
+
+                        <div class="card-body no-padding">
+                            <ul class="message-list">
+                                {% for _file in files_list %}
+                                <a>
+                                    <li>
+                                        <div class="message-block">
+                                            <div><span class="username">{{_file}}</span>
+                                            </div>
+                                            <div class="message">
+
+                                                <button id={{_file}} onclick="copyurl(this)">获取http链接</button>
+                                                <button onclick="window.location.href=''./del_file',filename=_file)}}'">删除</button>
+                                                <button onclick="window.location.href=''./uploaded_file',filename=_file)}}'">下载</button>
+                                                    <br>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </a>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>ECharts</title>
+		<!-- 引入 echarts.js -->
+		<script src="jquery.min.js"></script>
+		<script src="echarts.min.js"></script>
+		<script src="dataTool.min.js"></script>
+		<script src="jquery.min.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href='./static/css/bootstrap.min.css'>
+		<link rel="stylesheet" type="text/css" href='./static/css/font-awesome.min.css'>
+		<link rel="stylesheet" type="text/css" href='./static/css/animate.min.css'>
+		<link rel="stylesheet" type="text/css" href='./static/css/bootstrap-switch.min.css'>
+		<link rel="stylesheet" type="text/css" href='./static/css/checkbox3.min.css'>
+		<link rel="stylesheet" type="text/css" href='./static/css/jquery.dataTables.min.css'>
+		<link rel="stylesheet" type="text/css" href='./static/css/dataTables.bootstrap.css'>
+		<link rel="stylesheet" type="text/css" href='./static/css/select2.min.css'>
+		<!-- CSS App -->
+		<link rel="stylesheet" type="text/css" href='./static/style.css'>
+		<link rel="stylesheet" type="text/css" href='./static/flat-blue.css'>
+		<script>
+			function gopie()
+			{
+				window.location.href = './pie.html';
+			}
+			function gomain()
+			{
+				window.location.href = './index.html';
+			}
+			function goattack()
+			{
+			    window.location.href = './intention_attack.html';
+			}
+			function gorandom()
+			{
+			    window.location.href = './random_attack.html';
+			}
+			function goadds()
+			{
+			    window.location.href = './add_edge.html';
+			}
+			function gofinal()
+			{
+			    window.location.href = './final.html';
+			}
+		</script>
+	</head>
+	<body>
+	 <div class="app-container">
+        <div class="row content-container">
+
+			<div class="side-menu sidebar-inverse">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="side-menu-container">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" onclick="gomain()" style="cursor:pointer">
+                                <div class="icon fa fa-paper-plane"></div>
+                                <div class="title">Complex network</div>
+                            </a>
+                            <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+                                <i class="fa fa-times icon"></i>
+                            </button>
+                        </div>
+                        <ul class="nav navbar-nav">
+                                <li class="panel-default" style="background-color: transparent">
+                                <a onclick="gomain()" style="cursor:pointer">
+                                    <span class="icon fa fa-tachometer"></span><span class="title">Origin Network</span>
+                                </a>
+                            </li>
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a onclick="gopie()" style="cursor:pointer">
+                                        <span class="icon fa fa-desktop"></span><span class="title">Data Statistic</span>
+                                    </a>
+                            </li>
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a onclick="goattack()" style="cursor:pointer">
+                                        <span class="icon fa fa-table"></span><span class="title">Intentional Attack</span>
+                                    </a>
+                            </li>
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a onclick="gorandom()" style="cursor:pointer">
+                                        <span class="icon fa fa-file-text-o"></span><span class="title">Random Attack</span>
+                                    </a>
+                            </li>
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a onclick="goadds()" style="cursor:pointer">
+                                        <span class="icon fa fa-cubes"></span><span class="title">Add Edge</span>
+                                    </a>
+                            </li>
+                            <li class="panel-default" style="background-color: transparent">
+                                    <a onclick="gofinal()" style="cursor:pointer">
+                                        <span class="icon fa fa-slack"></span><span class="title">Final-Network</span>
+                                    </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+		</div>
+		<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+         <div>
+             <div id="j2" style="width: 200px;height:800px;float:left"></div>
+            <div id="main" style="width: 500px;height:680px;float:left;margin-right:50px">
+                <script type="text/javascript">
+                // 基于准备好的dom，初始化echarts实例
+                var myChart_pie = echarts.init(document.getElementById('main'));
+                var option2;
+                var degree_data = new Array();
+                var value_data = new Array();
+                var degrees = new Array();
+                var brower = [];
+                $.get('degree.json', function(data) {
+                var fp = typeof data=='string'?JSON.parse(data):data;
+                console.log(fp);
+                degree_data = JSON.parse(fp.degree);
+                console.log(degree_data);
+                value_data = JSON.parse(fp.value);
+                var index = 0;
+                for(var i in degree_data)
+                {
+                    degrees[index++] = 'Degree:' + degree_data[i];
+                    brower.push({
+                        value: value_data[i],
+                        name: degrees[i]
+                        });
+                }
+
+                console.log(degrees);
+                option = {
+                    title: {
+                        text: 'Node-Degree Distribution',
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    legend: {
+                        // orient: 'vertical',
+                        // top: 'middle',
+                        bottom: 10,
+                        left: 'center',
+                        data: degrees
+                    },
+                    series: [{
+                        type: 'pie',
+                        radius: '65%',
+                        center: ['50%', '50%'],
+                        selectedMode: 'single',
+                        data: brower,
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }]
+                };
+                myChart_pie.setOption(option);
+                });
+            </script>
+            </div>
+            <div id="attack" style="width: 800px;height:650px;float:left"></div>
+            <script type="text/javascript">
+                // 基于准备好的dom，初始化echarts实例
+                var myChart_attack = echarts.init(document.getElementById('attack'));
+                var option_attack;
+                var intention = Array();
+                var random_ = Array();
+                var x = Array();
+                $.get('attack.json', function(data) {
+                var fp = typeof data=='string'?JSON.parse(data):data;
+
+                random_ = fp.random;
+                intention = fp.intention;
+                for(var i in random_)
+                {
+                    x[i] = '    ';
+                }
+                var colors = ['#5793f3', '#d14a61', '#675bba'];
+                option_attack = {
+                    color: colors,
+
+                    tooltip: {
+                        trigger: 'none',
+                        axisPointer: {
+                            type: 'cross'
+                        }
+                    },
+                    legend: {
+                        data: ['random attack', 'intentional attack']
+                    },
+                    grid: {
+                        top: 70,
+                        bottom: 50
+                    },
+                    xAxis: [{
+                            type: 'category',
+                            axisTick: {
+                                alignWithLabel: true
+                            },
+                            axisLine: {
+                                onZero: false,
+                                lineStyle: {
+                                    color: colors[1]
+                                }
+                            },
+                            axisPointer: {
+                                label: {
+                                    formatter: function(params) {
+                                        return 'Connected: ' + params.value +
+                                            (params.seriesData.length ? '：' + params.seriesData[0].data : '');
+                                    }
+                                }
+                            },
+                            data: x
+                        },
+                        {
+                            type: 'category',
+                            axisTick: {
+                                alignWithLabel: true
+                            },
+                            axisLine: {
+                                onZero: false,
+                                lineStyle: {
+                                    color: colors[0]
+                                }
+                            },
+                            axisPointer: {
+                                label: {
+                                    formatter: function(params) {
+                                        return 'Connected: ' + params.value +
+                                            (params.seriesData.length ? '：' + params.seriesData[0].data : '');
+                                    }
+                                }
+                            },
+                            data: x
+                        }
+                    ],
+                    yAxis: [{
+                        type: 'value'
+                    }],
+                    series: [{
+                            name: 'random attack',
+                            type: 'line',
+                            xAxisIndex: 1,
+                            smooth: true,
+                            data: random_
+                        },
+                        {
+                            name: 'intentional attack',
+                            type: 'line',
+                            smooth: true,
+                            data: intention
+                        }
+                    ]
+                };
+
+                myChart_attack.setOption(option_attack);
+                });
+            </script>
+         </div>
+	 </div>
+	</body>
+
+</html>

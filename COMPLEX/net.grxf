@@ -1,0 +1,13 @@
+<gexf>
+    <graph defaultedgetype="undirected" mode="static">
+        <attributes class="node" mode="static">
+            <attribute id="modularity_class" title="Modularity Class" type="integer" />
+            <attribute id="id_class" title="Id Class" type="integer">
+            </attribute>
+        </attributes>
+        <nodes>
+        </nodes>
+        <edges>
+        </edges>
+    </graph>
+</gexf>
